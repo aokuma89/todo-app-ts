@@ -15,8 +15,24 @@ function Todo() {
   const [editValue, setEditValue] = useState<string>('');
   const [filter, setFilter] = useState<FilterType>('all');
   const [isInit, setIsInit] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [showFilterDropdown, setShowFilterDropdown] = useState<boolean>(false); 
 
   const editInputRef = useRef<HTMLInputElement | null>(null);
+  const filterDropdownRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
     
   useEffect(() => {
     const saved = localStorage.getItem('todos');
@@ -49,6 +65,24 @@ function Todo() {
       };
     }
   }, [editingId, editValue, todos]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (filterDropdownRef.current && !filterDropdownRef.current.contains(event.target as Node)) {
+        setShowFilterDropdown(false);
+      }
+    };
+
+    if (showFilterDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showFilterDropdown]);
 
   const addTodo = () => {
     const trimmedInputValue = inputValue.trim();
@@ -122,13 +156,12 @@ function Todo() {
       return;
     }
 
-    // 編集後のテキストが既存の他のタスクと重複しないかチェック
     const isDuplicate = todos.some(
       (todo) => todo.id !== editingId && todo.text.toLowerCase() === trimmedEditValue.toLowerCase()
     );
 
     if (isDuplicate) {
-      alert('同じ名前のタスクが既に存在します。'); // ユーザーに重複を通知
+      alert('同じ名前のタスクが既に存在します。');
       return;
     }
 
@@ -175,6 +208,19 @@ function Todo() {
     filteredTodos = todos.filter((t) => t.completed === true);
   }
 
+  const getFilterDisplayWithCount = (filterType: FilterType) => {
+    switch (filterType) {
+      case 'all':
+        return `すべて (${todos.length})`;
+      case 'todo':
+        return `未完了 (${todos.filter((t) => t.completed === false).length})`;
+      case 'done':
+        return `完了済み (${completedCount})`;
+      default:
+        return '';
+    }
+  };
+
   return (
     <div className="todo-container">
       <h1>Todo App</h1>
@@ -193,25 +239,67 @@ function Todo() {
         </button>
       </div>
 
-      <div className="filter-tabs">
-        <button
-          onClick={() => setFilter('all')}
-          className={`filter-tab ${filter === 'all' ? 'active' : ''}`}
-        >
-          すべて ({todos.length})
-        </button>
-        <button
-          onClick={() => setFilter('todo')}
-          className={`filter-tab ${filter === 'todo' ? 'active' : ''}`}
-        >
-          未完了 ({todos.filter((t) => t.completed === false).length})
-        </button>
-        <button
-          onClick={() => setFilter('done')}
-          className={`filter-tab ${filter === 'done' ? 'active' : ''}`}
-        >
-          完了済み ({completedCount})
-        </button>
+      <div
+        className={`filter-tabs ${isMobile ? 'filter-tabs-mobile' : ''}`}
+        ref={isMobile ? filterDropdownRef : null}
+      >
+        {isMobile ? (
+          <>
+            <button
+              className={`filter-dropdown-toggle filter-tab filter-dropdown-toggle-style`}
+              onClick={() => setShowFilterDropdown((prev) => !prev)}
+            >
+              <span>{getFilterDisplayWithCount(filter)}</span>
+              <span className={`filter-dropdown-arrow ${showFilterDropdown ? 'open' : ''}`}>
+                {showFilterDropdown ? '▲' : '▼'}
+              </span>
+            </button>
+
+            <div
+              className={`filter-dropdown-options ${showFilterDropdown ? 'open' : ''}`}
+            >
+              <button
+                onClick={() => { setFilter('all'); setShowFilterDropdown(false); }}
+                className={`filter-dropdown-option filter-tab ${filter === 'all' ? 'active' : ''} filter-dropdown-option-style`}
+              >
+                すべて ({todos.length})
+              </button>
+              <button
+                onClick={() => { setFilter('todo'); setShowFilterDropdown(false); }}
+                className={`filter-dropdown-option filter-tab ${filter === 'todo' ? 'active' : ''} filter-dropdown-option-style`}
+              >
+                未完了 ({todos.filter((t) => t.completed === false).length})
+              </button>
+              <button
+                onClick={() => { setFilter('done'); setShowFilterDropdown(false); }}
+                className={`filter-dropdown-option filter-tab ${filter === 'done' ? 'active' : ''} filter-dropdown-option-style`}
+              >
+                完了済み ({completedCount})
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <button
+              onClick={() => setFilter('all')}
+              className={`filter-tab ${filter === 'all' ? 'active' : ''}`}
+            >
+              すべて ({todos.length})
+            </button>
+            <button
+              onClick={() => setFilter('todo')}
+              className={`filter-tab ${filter === 'todo' ? 'active' : ''}`}
+            >
+              未完了 ({todos.filter((t) => t.completed === false).length})
+            </button>
+            <button
+              onClick={() => setFilter('done')}
+              className={`filter-tab ${filter === 'done' ? 'active' : ''}`}
+            >
+              完了済み ({completedCount})
+            </button>
+          </>
+        )}
       </div>
 
       <div className="todo-list">
