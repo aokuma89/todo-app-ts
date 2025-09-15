@@ -542,56 +542,56 @@
   .todo-stats {
     padding: 1rem; /* Reduced padding for mobile */
   }
-
-  /* Styles for mobile filter dropdown */
-
-  /* For the filter-tabs div when in mobile view */
-  .filter-tabs.filter-tabs-mobile {
-    position: relative;
   }
 
-  /* For the filter dropdown toggle button */
-  .filter-dropdown-toggle-style {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
+  /* Styles extracted from inline style attributes */
 
-  /* Base styles for the filter dropdown options container */
-  .filter-dropdown-options {
-    position: absolute;
-    top: 100%; /* Position below the toggle button */
-    left: 0;
-    right: 0;
-    z-index: 10; /* Ensure dropdown appears above other content */
-    background: white; /* Assuming white background for dropdown options */
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Subtle shadow for depth */
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    margin-top: 0.5rem; /* Small margin to separate from toggle */
-    overflow: hidden; /* Hide content that exceeds max-height during transition */
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out, max-height 0.3s ease-out;
-    opacity: 0;
-    max-height: 0; /* Set a max-height when open, 0 when closed */
-    transform: translateY(-10px); /* Floats down gently */
-    pointer-events: none; /* Disable interaction when closed */
-  }
+        /* For the filter-tabs div when in mobile view */
+        .filter-tabs.filter-tabs-mobile {
+          position: relative;
+        }
 
-  /* Styles for the filter dropdown options container when open */
-  .filter-dropdown-options.open {
-    opacity: 1;
-    max-height: 200px; /* Sufficiently large to show all content */
-    transform: translateY(0);
-    pointer-events: auto; /* Enable interaction when open */
-  }
+        /* For the filter dropdown toggle button */
+        .filter-dropdown-toggle-style {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+        }
 
-  /* For individual filter dropdown option buttons */
-  .filter-dropdown-option-style {
-    width: 100%;
-    text-align: left;
-  }
-}
+        /* Base styles for the filter dropdown options container */
+        .filter-dropdown-options {
+          position: absolute;
+          top: 100%; /* Position below the toggle button */
+          left: 0;
+          right: 0;
+          z-index: 10; /* Ensure dropdown appears above other content */
+          background: white; /* Assuming white background for dropdown options */
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          padding: 0.5rem;
+          margin-top: 0.5rem; /* Small margin to separate from toggle */
+          overflow: hidden; /* Hide content that exceeds max-height during transition */
+          transition: opacity 0.3s ease-out, transform 0.3s ease-out, max-height 0.3s ease-out;
+          opacity: 0;
+          max-height: 0; /* Set a max-height when open, 0 when closed */
+          transform: translateY(-10px); /* Floats down gently */
+          pointer-events: none; /* Disable interaction when closed */
+        }
+
+        /* Styles for the filter dropdown options container when open */
+        .filter-dropdown-options.open {
+          opacity: 1;
+          max-height: 200px; /* Sufficiently large to show all content */
+          transform: translateY(0);
+          pointer-events: auto; /* Enable interaction when open */
+        }
+
+        /* For individual filter dropdown option buttons */
+        .filter-dropdown-option-style {
+          width: 100%;
+          text-align: left;
+        }
