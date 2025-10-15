@@ -316,8 +316,7 @@
 }
 
 .edit-buttons {
-  display: flex;
-  gap: 0.5rem;
+  display: none;
 }
 
 .save-button {
@@ -538,7 +537,7 @@
     max-height: 85vh;
     min-height: 300px;
     padding-right: 0;
-    margin-bottom: 0.8rem;
+    margin-bottom: 2.2rem;
   }
   .todo-item {
     padding: 0.7rem;
@@ -550,12 +549,11 @@
     gap: 0.5rem;
   }
   .edit-buttons {
-    flex-direction: column;
-    gap: 0.5rem;
+    display: none;
   }
   .edit-input {
-    padding: 0.8rem 1.2rem;
-    min-height: 45px;
+    padding: 1rem 1.5rem;
+    min-height: 50px;
     height: auto;
     font-size: 1rem;
   }
